@@ -1,0 +1,26 @@
+/* 
+stack the different pane utop the canvasHolder...
+*/
+
+#canvasHolder {
+    position: relative;
+    top:30px;
+    left:30px;
+}
+
+.pane {
+    position: absolute;
+    border: 1px solid #9C9898;
+    top: 0px;
+    left: 0px;
+}
+
+#background {
+    z-index: 10;
+}
+#timeline {
+    z-index: 20;
+}
+#glasspane {
+    z-index: 30;
+}
