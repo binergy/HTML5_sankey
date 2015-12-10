@@ -1,90 +1,66 @@
 "use strict";
 
-var Box = function(x,y,width,height) {
-    this.x = x;
-    this.y = y;
-    this.w = width;
-    this.h = height;
+var Box = function() {
+    this.x=-1;
+    this.y=-1;
+    this.w=-1;
+    this.h=-1;
 }
 
-var logic = {
-    w : 0,
-    h : 0,
-    init( width, height ) {
-        console.log("W : " + width + "   H " + height ); 
+var Layer = function( ary, height ) {
+    this.groups = ary;
+    this.sparsity = 0;
+    var total = 0;
+    for ( var g in this.groups ) {
+        total += this.groups[g]; 
+    }
+    this.sparsity = ( height - total ) / ( ary.length + 1 );
+    this.population = total;
+}
+
+function log( s ) {
+    console.log( s ); 
+}
+var Logic = {
+    init : function(width, height) {
         this.w = width;
         this.h = height;
+        this.matrix = [];
 
-        this.canvas = document.getElementById("background");
-        this.context = this.canvas.getContext('2d');
-        /*
-        this.matrix = []
-        this.matrix[0] = []; 
-        this.matrix[0][0] = new Box( 20, 20, 40, 100 );
-        this.matrix[0][1] = new Box( 120, 40, 40, 100 );
-        */
-        this.matrix = []; 
-        this.draw();
+        this.populate();
     },
 
-    draw() {
-        var color ="rgba(50,50,50,0.9)";
-        this.matrix = []; 
-        for ( var layer = 0; layer < 1; layer++ ) { 
-            this.matrix[layer] = [];
-            var available = this.h * 0.60;
-            var h = 0;
-            var y = 0; 
-            var looping = true;
-            var loop = 0;
-            var stop = 10;
-            var keep_alive = true; 
-            var tally = 0;
-                var color ="rgba(50,50,50,0.9)";
+    populate : function() {
 
-            while ( keep_alive && loop < stop ) {
-                var size = Math.random() * available;
-                y += 2;
-                tally += y + size;
-                if ( tally > this.h ) {
-                    size = this.h - 2;
-                    keep_alive = false;
-                } 
-                var box = new Box( 20, y, 40, size ); 
-//console.log("LOOP " + loop +"   height " + this.h +"    TALLY " + tally.toFixed(2) + " size " + size.toFixed(2) ); 
+        var possible = [1,2,3,5,6,6,6,8,9]; 
+        var last_group_count = -1;
+        for ( var layer = 0; layer < 2; layer++ ) {
+            var pick = Math.floor( Math.random() * possible.length);
 
-
-console.log("LOOP " + loop +" y: " + box.y + "     h " + box.h ); 
-y += size;
-  this.context.fillStyle = color;
-                this.context.fillRect(box.x,box.y,box.w,box.h);
-              
-
-                this.matrix[layer][loop] = box;
-
-                loop++;
+            var group_count = possible[pick];
+            // mimick the long term stabile groups which tend to be very few
+            // i.e., just lock in 1 group and roll through the rest of the timeline
+            // with that one
+            if ( last_group_count === 1 ) {
+                group_count = 1;
             }
+            last_group_count = group_count;
+            var max_possible = this.h / group_count;
+            var ary = [];
+            for ( var i = 0; i < group_count; i++ ) {
+                ary[i] = Math.random() * max_possible;
+            }
+            this.matrix[layer] = new Layer( ary, this.h );
         }
-    },
-
-
-    mouseUp(pos) {
-//        console.log("mouseUp! " + pos.x);
-    },
-
-    mouseDown(pos) {
-//        console.log("mouseDown! " + pos.x);
-    },
-
-    clicks(pos) {
-//        console.log("clicks! " + pos.x);
-    },
-
-    dragging(pos) {
-//        console.log("!!! dragging! " + pos.x);
     },
 }
 
-function log(s) {
-    console.log(s);
+
+//////////////////// //////////////////// //////////////////// ////////////////////
+try { 
+    module.exports.Logic = Logic;
+    module.exports.Layer = Layer;
+
+} catch ( ignore ) {
+    // This will be tripped only if loaded into a webpage.
 }

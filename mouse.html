@@ -15,16 +15,12 @@
 
 
 <script src="logic.js"></script>
+<script src="display.js"></script>
 <script src="mouse.js"></script>
 <script>
-// mouseController is pretty generic, but it wants the ID of a canvas
-// and a ref to an object that has mouseUp(position),mouseDown(position),
-//clicks(position) and dragging(position) defined on it
-mouseController.init( "glasspane", logic );
-
-// logic's init takes the width and height of the screen
-// logic will display the sankey graph
-logic.init( 1840, 500 );
+MouseController.init( "glasspane", Display );
+Logic.init(1840, 500);
+Display.init("background", 1840,500);
 </script>
 </body>
 </html>
