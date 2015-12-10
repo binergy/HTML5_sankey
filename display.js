@@ -1,8 +1,8 @@
 "use strict";
 
 var Display = {
-    init( canvasId, width, height ) {
-
+    init( m, canvasId, width, height ) {
+        this.matrix = m;
         this.mouseIsDown = false;
         this.canvas = document.getElementById(canvasId);
         this.context = this.canvas.getContext('2d');
@@ -17,10 +17,36 @@ var Display = {
                 var color ="rgba(50,50,50,0.9)";
 
               this.context.fillStyle = color;
-    //            this.context.fillRect(box.x,box.y,box.w,box.h);
-        var over = 20; 
+              var step = 100; 
+            var over = 20; 
+              for ( var i in this.matrix ) {
+                var layer = this.matrix[i]; 
 
-    this.context.fillRect(20,20,20,20);
+                var down = 0 ; 
+
+                down += layer.sparsity;
+                for ( var j in layer.groups ) {
+
+                    var size = layer.groups[j]; 
+
+                    this.context.fillRect(over,down,40,size);
+
+                    down += size; 
+                    down += layer.sparsity;
+
+
+                }
+
+                over += step; 
+
+
+              }
+
+    //            this.context.fillRect(box.x,box.y,box.w,box.h);
+//        var over = 20; 
+
+  //  this.context.fillRect(20,20,20,20);
+
 
 /* 
         for ( var layer in this.matrix ) {
@@ -54,8 +80,4 @@ var Display = {
     dragging(pos) {
 //        console.log("!!! dragging! " + pos.x);
     },
-}
-
-function log(s) {
-    console.log(s);
 }

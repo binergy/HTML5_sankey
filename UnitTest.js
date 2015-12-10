@@ -10,6 +10,7 @@ var UnitTest = {
 
         this.populate_test();
         this.layerObj_test();
+        this.matrixShape_test();
     },
 
     populate_test : function() {
@@ -19,6 +20,31 @@ var UnitTest = {
             isOk = true; 
         }
         this.verdict("populate_test", isOk );
+    },
+    matrixShape_test : function() {
+        var bigEnough = true; 
+        for ( var i in Logic.matrix ) {
+            var layer = Logic.matrix[i]; 
+//            console.log("groups: " + layer.groups.length );
+            for ( var j in layer.groups ) {
+//                console.log("\t\t" + layer.groups[j]);
+                if ( layer.groups[j] < 1 ) {
+                    bigEnough = false;
+                }
+            }
+        } 
+
+        var squareEnough = false;
+        if ( Logic.matrix.length > 1 ) {
+            if ( Logic.matrix[0].groups.length > 0 ) {
+                squareEnough = true;
+
+            }
+        }
+//        console.log("BE: " + bigEnough );
+//        console.log("SE " + squareEnough); 
+        var isOk = true == squareEnough == bigEnough; 
+        this.verdict("matrixShape_test", isOk );
     },
 
     layerObj_test : function() {

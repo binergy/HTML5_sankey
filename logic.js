@@ -34,7 +34,7 @@ var Logic = {
 
         var possible = [1,2,3,5,6,6,6,8,9]; 
         var last_group_count = -1;
-        for ( var layer = 0; layer < 2; layer++ ) {
+        for ( var layer = 0; layer < 10; layer++ ) {
             var pick = Math.floor( Math.random() * possible.length);
 
             var group_count = possible[pick];
@@ -48,7 +48,11 @@ var Logic = {
             var max_possible = this.h / group_count;
             var ary = [];
             for ( var i = 0; i < group_count; i++ ) {
-                ary[i] = Math.random() * max_possible;
+                var val = Math.random() * max_possible;
+                if ( val < 6 ) { 
+                    val = 5;
+                } 
+                ary[i] = val;
             }
             this.matrix[layer] = new Layer( ary, this.h );
         }
