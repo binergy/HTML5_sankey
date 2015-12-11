@@ -1,11 +1,12 @@
 "use strict";
 
-var Box = function() {
-    this.x=-1;
-    this.y=-1;
-    this.w=-1;
-    this.h=-1;
+var Box = function(x,y,w,h) {
+    this.x=x;
+    this.y=y;
+    this.w=w;
+    this.h=h;
 }
+//Box.prototype = {todo : function() {}}
 
 var Layer = function( ary, height ) {
     this.groups = ary;
@@ -16,11 +17,9 @@ var Layer = function( ary, height ) {
     }
     this.sparsity = ( height - total ) / ( ary.length + 1 );
     this.population = total;
+    this.boxes = []; 
 }
 
-function log( s ) {
-    console.log( s ); 
-}
 var Logic = {
     init : function(width, height) {
         this.w = width;
@@ -31,6 +30,9 @@ var Logic = {
     },
 
     populate : function() {
+        // make the basic random population of cohorts-to-be
+        // and also make sure that they'll fix into the screen 
+        // height
 
         var possible = [1,2,3,5,6,6,6,8,9]; 
         var last_group_count = -1;
@@ -56,15 +58,59 @@ var Logic = {
             }
             this.matrix[layer] = new Layer( ary, this.h );
         }
-    },
-}
 
+        this.makeBoxCohort(); 
+    },
+
+    makeBoxCohort : function() { 
+        var step = 190;
+        var over = 20;
+        for (var i in this.matrix) {
+            var layer = this.matrix[i];
+
+            var down = 0;
+
+            down += layer.sparsity;
+            for (var j in layer.groups) {
+                var size = layer.groups[j];
+                layer.boxes[j] = new Box( over, down, 40, size );
+                down += size;
+                down += layer.sparsity;
+            }
+            over += step;
+        }
+
+
+    },
+
+/* 
+    makeBoxCohort : function() {
+        var step = 100;
+        var over = 20;
+        for (var i in this.matrix) {
+            var down = 0;
+            down += this.matrix[i].sparsity;
+
+            for (var j in this.matrix[i].groups) {
+                var size = this.matrix[i].groups[j];
+                down += size;
+                down += this.matrix[i].sparsity;
+                this.matrix[i].boxes[j] = new Box(over, down, 40, size);
+            }
+            over += step;
+        }
+    },
+*/
+
+
+
+
+}
 
 //////////////////// //////////////////// //////////////////// ////////////////////
 try { 
     module.exports.Logic = Logic;
     module.exports.Layer = Layer;
-
 } catch ( ignore ) {
     // This will be tripped only if loaded into a webpage.
 }

@@ -7,11 +7,40 @@ var Display = {
         this.canvas = document.getElementById(canvasId);
         this.context = this.canvas.getContext('2d');
 
-
         this.w = width;
         this.h = height;
-        this.draw();
+//        this.draw();
+        this.draw2(); 
     },
+
+
+    draw2() {
+
+        var color2 = "rgba(50,50,50,0.9)";
+        this.context.fillStyle = color2;
+        for (var i in this.matrix) {
+            var layer = this.matrix[i];
+
+            for (var j in layer.boxes) {
+                var box = layer.boxes[j]
+                this.context.fillRect(box.x,box.y,box.w,box.h);
+            }
+        }
+
+
+
+        var color = "rgba(255,50,50,0.9)";
+        this.context.fillStyle = color;
+        for (var i in this.matrix) {
+            var layer = this.matrix[i];
+
+            for (var j in layer.boxes) {
+                var box = layer.boxes[j]
+                this.context.fillRect(box.x + 10,box.y,box.w,box.h);
+            }
+        }
+    },
+
 
     draw() {
         var color = "rgba(50,50,50,0.9)";
@@ -26,18 +55,12 @@ var Display = {
 
             down += layer.sparsity;
             for (var j in layer.groups) {
-
                 var size = layer.groups[j];
-
                 this.context.fillRect(over, down, 40, size);
-
                 down += size;
                 down += layer.sparsity;
             }
-
             over += step;
-
-
         }
     },
 
