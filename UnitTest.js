@@ -11,6 +11,46 @@ var UnitTest = {
         this.populate_test();
         this.layerObj_test();
         this.matrixShape_test();
+        this.boxes_matrix_agreement_test(); 
+        this.boxes_cohort_test(); 
+
+    },
+
+
+    boxes_cohort_test : function() {
+
+        for ( var i in Logic.matrix ) {
+            for ( var j in Logic.matrix[i].boxes ) {
+                console.log(  i + "   " + j + "   " + Logic.matrix[i].boxes[j].cohort );
+            }
+            console.log("");
+        }
+    }, 
+
+    boxes_matrix_agreement_test : function() {
+        // are the boxes all cool?
+        var isOk = true;
+        var isXsetProperly = true; 
+        for ( var i in Logic.matrix ) {
+
+            var g = Logic.matrix[i].groups.length; 
+            var b = Logic.matrix[i].boxes.length; 
+            if ( g !== b ) {
+                isOk = false;
+            }
+             for ( var j  =0; j < ( Logic.matrix[i].boxes.length - 1 ) ; j++) {
+                // b should be 'lower' on the page than a
+                var a = Logic.matrix[i].boxes[j].y;
+                var b = Logic.matrix[i].boxes[j + 1].y;
+                if ( a > b ) {
+                    isXsetProperly = false;
+                }
+             }
+        }
+        if ( ! isXsetProperly) {
+            isOk = false;
+        }
+        this.verdict("boxes_matrix_agreement_test", isOk );
     },
 
     populate_test : function() {
@@ -41,8 +81,8 @@ var UnitTest = {
 
             }
         }
-//        console.log("BE: " + bigEnough );
-//        console.log("SE " + squareEnough); 
+        //console.log("BE: " + bigEnough );
+        //console.log("SE " + squareEnough); 
         var isOk = true == squareEnough == bigEnough; 
         this.verdict("matrixShape_test", isOk );
     },
