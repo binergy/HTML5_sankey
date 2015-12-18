@@ -62,12 +62,12 @@ var Display = {
 
     draw() {
 
-//R: 167 G: 219 B: 215
         var color = "rgba(167,219,215,0.9)";
         this.context.fillStyle = color;
         var x = 0;
 
-        var stiffness = 0.4;
+        var stiffness = 0.4; // how for inbetween the layers to put the 
+        // control points for the bezier curves
 
         for (var i = 0; i < this.matrix.length; i++) {
             var layer = this.matrix[i];
@@ -83,7 +83,10 @@ var Display = {
                 this.context.save();
                 if (nextLayer != undefined) {
 
-                    var box2 = nextLayer.boxes[0];
+                    var randomIndex = Math.floor( Math.random() * nextLayer.boxes.length);
+
+
+                    var box2 = nextLayer.boxes[randomIndex];
 
                     var distance = Math.abs( box2['x'] - ( box['x'] + box['w']))
                     distance *= stiffness;
