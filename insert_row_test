@@ -1,0 +1,37 @@
+from BagOfFunctions import *
+import pymysql.cursors
+
+class SetIntoHyperplane(object):
+    def __init__(self):  
+        info=mysql_information()
+        self.cnx = pymysql.connect(host=info['host'],
+                                   user=info['user'],
+                                   password=info['password'],
+                                   db=info['db'],
+                                   charset=info['charset'],
+                                   cursorclass=pymysql.cursors.DictCursor)
+            
+        self.cursor = self.cnx.cursor()
+        self.step1()
+        self.cursor.close()
+       
+    def step1(self):
+        
+        sql = "INSERT into riv_person (person_id,angle,riv ) VALUES (%s, %s, %s)"
+
+        ary = []
+        ary.append("123")
+        ary.append("123.456")
+        ary.append("0,9,8")
+        
+        self.cursor.execute(sql, ary )
+        id = self.cursor.lastrowid
+        print("last id {0}" .format( id ))
+
+if __name__ == '__main__':
+    begining = right_now()
+    thing = SetIntoHyperplane()
+    ending = right_now()
+    print("Total millisecs {0} ".format( int( ending - begining) ))    
+    print("The end")
+    
